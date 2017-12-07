@@ -68,8 +68,8 @@ COMP1:
 EXIT1:	
 	POP DI
     RET 
-    
     NUMBER ENDP
+    
 ;×ÖÄ¸¼ÆÊý      
     WORDS PROC NEAR  
     PUSH DI
@@ -118,12 +118,16 @@ COUNTothers:
 	JMP COMP3
 	
 EXIT3:
+  	POP DI
     RET 
-    POP DI
     OTHERS ENDP
 
 CODES ENDS
     END START
+
+
+
+
 
 
 

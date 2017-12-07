@@ -1,0 +1,109 @@
+DATAS SEGMENT
+    ;此处输入数据段代码  
+  	NAMEMSG  DB 13,10, 'Please input the name:' , '$'
+	TELEPHONEMSG   DB  13,10, 'Input a telephone number:', '$'
+	PRINTFORMAT DB 13,10,'NAME       TEL.' , '$'
+ 	CRLF  DB 0AH,0DH,"$";回车换行
+ 	FORMATION DB 8 DUP(' '),'$'
+	INBUF DB 20
+		  DB ?	
+	      db 20 DUP('$')
+	OUTNAME DB 10 DUP('$')  
+	OUTPHONE DB 9 DUP('$')
+	
+	
+DATAS ENDS
+STACKS SEGMENT
+    ;此处输入堆栈段代码
+STACKS ENDS
+
+CODES SEGMENT
+    ASSUME CS:CODES,DS:DATAS,SS:STACKS
+START:
+    MOV AX,DATAS
+    MOV DS,AX
+    ;此处输入代码段代码
+    LEA DX,NAMEMSG;提示输入姓名
+    MOV AH,09H
+    INT 21H
+    CALL INPUT_NAME;输入姓名
+    LEA DX,TELEPHONEMSG;提示输入电话号码
+    MOV AH,09H
+    INT 21H
+    CALL INPHONE
+   	CALL PRINTLINE ;显示姓名和电话号码  
+Exit:  
+    MOV AH,4CH
+    INT 21H
+    
+ ;输入姓名 
+INPUT_NAME PROC NEAR
+   CALL GETCHAR  
+;INBUF-OUTNAME
+  PUSH DS
+  POP ES
+  CLD
+  mov CH,00H
+  MOV CL,INBUF+1;长度
+  LEA SI,INBUF+2
+  LEA DI,OUTNAME
+  REP MOVSB
+    RET 
+ INPUT_NAME ENDP
+ 
+ ;输入电话
+INPHONE  PROC NEAR
+
+ CALL GETCHAR
+  PUSH DS
+  POP ES
+  CLD
+  mov CH,00H
+  MOV CL,INBUF+1;长度
+  LEA SI,INBUF+2
+  LEA DI,OUTPHONE
+  REP MOVSB
+
+ RET
+ INPHONE ENDP
+ 
+ ;接受从键盘输入的字符
+  GETCHAR  PROC NEAR
+  MOV DX,OFFSET INBUF;输入至缓冲区
+  MOV AH,0AH
+  INT 21H
+  RET 
+  GETCHAR ENDP
+   ;按照固定格式输出姓名与电话
+   PRINTLINE PROC NEAR
+  MOV DX,OFFSET PRINTFORMAT 
+  MOV AH,09H
+  INT 21H
+  LEA DX,CRLF
+  MOV AH,09H
+  INT 21H
+  LEA DX,OUTNAME
+  MOV AH,09H
+  INT 21H
+  LEA DX,FORMATION
+  MOV AH,09H
+  INT 21H
+  LEA DX,OUTPHONE
+  MOV AH,09H
+  INT 21H
+  
+   RET
+   PRINTLINE ENDP
+    
+CODES ENDS
+    END START
+
+
+
+
+
+
+
+
+
+

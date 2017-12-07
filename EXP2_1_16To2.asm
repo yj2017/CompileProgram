@@ -16,7 +16,7 @@ START:
     ;此处输入代码段代码
     MOV CH,4;输入个数
     MOV DH,16;二进制位数
-    MOV BX,00H
+    MOV BX,00H;二进制数
     MOV CL,4;移位位数
 L1:
 	MOV AH,1
@@ -103,6 +103,8 @@ Print0:
 
 CODES ENDS
     END START
+
+
 
 
 
